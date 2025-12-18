@@ -1,0 +1,18 @@
+﻿<Window x:Class="CronNotify.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CronNotify"
+        mc:Ignorable="d"
+        Title="定时提醒" Height="450" Width="800" StateChanged="Window_StateChanged">
+    <Grid>
+        <TextBox x:Name="ct" HorizontalAlignment="Left" Margin="26,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" Height="228"/>
+        <TextBox x:Name="info" HorizontalAlignment="Left" Margin="415,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315" Height="228"/>
+        <Button x:Name="start" Content="开始" HorizontalAlignment="Left" Margin="26,318,0,0" VerticalAlignment="Top" Height="51" Width="288" Click="start_Click"/>
+        <TextBlock x:Name="timeblock" HorizontalAlignment="Left" Margin="415,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="51" Width="315"/>
+        <TextBlock HorizontalAlignment="Left" Margin="26,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="json时间列表"/><LineBreak/><Run/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="415,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="zh-cn" Text="日志"/></TextBlock>
+
+    </Grid>
+</Window>
