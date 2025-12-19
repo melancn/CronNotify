@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Policy;
@@ -31,6 +32,7 @@ namespace CronNotify
         private NotifyIcon notifyIcon;
         private int run_id = 0;
         private Boolean is_stop = false;
+
 
         public MainWindow()
         {
@@ -111,9 +113,9 @@ namespace CronNotify
 
         private void start_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(info.Text))
+            if (string.IsNullOrEmpty(ct.Text))
             {
-                System.Windows.MessageBox.Show("");
+                System.Windows.MessageBox.Show("任务不能空");
                 return;
             }
             if (run_id > 0)
@@ -149,6 +151,15 @@ namespace CronNotify
             {
                 return;
             }
+            lists.Sort();
+            StringBuilder? info = new StringBuilder("\r\n");
+            foreach (TimeList list in lists)
+            {
+                info.AppendLine(list.time.ToString("yyyy-MM-dd HH:mm:ss") + " 【" + list.text + "】 " + list.beforeSecond);
+            }
+            addTextToInfo("获取任务：" + info);
+            info = null;
+            this.ct2.DataContext = lists;
             await System.Threading.Tasks.Task.Run(() =>
             {
                 Debug.WriteLine("s Thread ID:#{0}", Thread.CurrentThread.ManagedThreadId);
@@ -177,7 +188,11 @@ namespace CronNotify
                     foreach (var list in lists)
                     {
                         Debug.WriteLine(list.time);
-                        if (list.time <= now)
+                        if (list.time <= now.AddSeconds(-300))
+                        {
+                            continue;
+                        }
+                        else if (list.time <= now)
                         {
                             addTextToInfo("提醒：" + list.text);
                             if (notifyIcon != null) notifyIcon.ShowBalloonTip(100, "", list.text, ToolTipIcon.Info);
@@ -186,13 +201,24 @@ namespace CronNotify
                         }
                         else if (list.times == 0 && list.time.AddSeconds(-list.beforeSecond) <= now)
                         {
-                            addTextToInfo(now + "：" + list.time + " " + list.text);
+                            addTextToInfo("提前提醒：" + list.time + " " + list.text);
                             if (notifyIcon != null) notifyIcon.ShowBalloonTip(100, "", list.text, ToolTipIcon.Info);
                             list.times++;
                         }
                         nlist.Add(list);
                     }
-                    lists = nlist;
+                    if (lists.Count != nlist.Count)
+                    {
+                        string text = Njson.JsonConvert.SerializeObject(nlist, new JsonSerializerSettings
+                        {
+                            DateFormatString = "yyyy-MM-dd HH:mm:ss"
+                        });
+                        //Dispatcher.InvokeAsync(() =>
+                        //{
+                        //    ct2.DataContext = text;
+                        //});
+                        lists = nlist;
+                    }
                     Debug.WriteLine(lists.Count);
 
 

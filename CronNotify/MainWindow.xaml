@@ -7,12 +7,41 @@
         mc:Ignorable="d"
         Title="定时提醒" Height="450" Width="800" StateChanged="Window_StateChanged">
     <Grid>
-        <TextBox x:Name="ct" HorizontalAlignment="Left" Margin="26,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" Height="228"/>
-        <TextBox x:Name="info" HorizontalAlignment="Left" Margin="415,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315" Height="228"/>
-        <Button x:Name="start" Content="开始" HorizontalAlignment="Left" Margin="26,318,0,0" VerticalAlignment="Top" Height="51" Width="288" Click="start_Click"/>
-        <TextBlock x:Name="timeblock" HorizontalAlignment="Left" Margin="415,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="51" Width="315"/>
-        <TextBlock HorizontalAlignment="Left" Margin="26,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="json时间列表"/><LineBreak/><Run/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="415,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="zh-cn" Text="日志"/></TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="info" TextWrapping="Wrap" Grid.Column="1" Margin="0,20,0,0"/>
+        <Button x:Name="start" Content="开始" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="280" Click="start_Click" Grid.Row="1"/>
+        <TextBlock x:Name="timeblock" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.463,-1.306" Grid.Column="1"><Run Language="zh-cn" Text="日志"/></TextBlock>
+        <TabControl>
+            <TabItem Header="计划任务列表">
+                <TextBox x:Name="ct" TextWrapping="Wrap"/>
+            </TabItem>
+            <TabItem Header="当前任务列表">
+                <ListView x:Name="ct2" ItemsSource="{Binding}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Time">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!-- StringFormat 格式化日期 -->
+                                        <TextBlock Text="{Binding time, StringFormat='yyyy-MM-dd HH:mm:ss'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Second" DisplayMemberBinding="{Binding beforeSecond}" />
+                            <GridViewColumn Header="Content" DisplayMemberBinding="{Binding text}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>
